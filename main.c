@@ -45,8 +45,22 @@ char *run_length_decode(char const *input) {
     }
     // IMPLEMENT
     int currIndex = 0;
+    int outputLength = 0;
+
+    while (currIndex < strlen(input)) {
+        if (!isdigit(input[currIndex]) && isdigit(input[currIndex + 1])) {
+            outputLength += input[currIndex + 1] - '0';
+            currIndex += 2;
+        } else {
+            outputLength++;
+            currIndex++;
+        }
+    }
+
+    currIndex = 0;
     int outputIndex = 0;
-    char *output = (char *) malloc(9 * (strlen(input) + 1) * sizeof(char));
+
+    char *output = (char *) malloc(outputLength * sizeof(char));
     while (currIndex < strlen(input)) {
         if (!isdigit(input[currIndex]) && isdigit(input[currIndex + 1])) {
             for (int i = 0; i < input[currIndex + 1] - '0'; ++i) {
@@ -73,9 +87,9 @@ int main() {
     inputTestCases[2] = "aabbccddee";
     for (int i = 0; i < 3; i++) {
         output = run_length_encode(inputTestCases[i]);
-        printf("%s\n", output);
+        printf("[Encoded %d]: %s\n", i, output);
         encoded = run_length_decode(output);
-        printf("%s\n", encoded);
+        printf("[Decoded %d]: %s\n", i, encoded);
     }
     return 0;
 }
